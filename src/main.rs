@@ -10,21 +10,35 @@ fn main() {
     
     let listener = TcpListener::bind("127.0.0.1:6379").unwrap();
     
-    for stream in listener.incoming() {
-        match stream {
-            Ok(mut stream) => {
-               
-                handle_connection(&mut stream);
-            }
-            Err(e) => {
-                println!("error: {}", e);
+    
+        for stream in listener.incoming() {
+            match stream {
+                Ok(mut stream) => {
+                
+                    handle_connection(&mut stream);
+                }
+                Err(e) => {
+                    println!("error: {}", e);
+                    break;
+                }
             }
         }
-    }
+    
 }
 
 fn handle_connection(stream: &mut TcpStream) {
-    let response = "+PONG\r\n";
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
+    let mut buffer = [0; 1024];
+    loop {
+        match stream.read(&mut buffer) {
+            Ok(_size) => {
+                let response = "+PONG\r\n";
+                stream.write(response.as_bytes()).unwrap();
+                stream.flush().unwrap();
+            },
+            Err(_e) => {
+                // Handle any error that might occur during read
+                break;
+            },
+        }
+    }
 }
