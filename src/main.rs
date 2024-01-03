@@ -49,3 +49,10 @@ async fn handle_connection(mut stream: TcpStream) {
 // However, it's important to note that "concurrent" does not necessarily mean "in parallel" or "on a different thread". The Tokio runtime uses a thread pool to execute tasks, and it uses an event-driven model with non-blocking I/O to achieve high concurrency even on a small number of threads.
 // When you spawn a task with tokio::spawn, it gets scheduled to run on one of the threads in the Tokio runtime's thread pool. It might run on the same thread as the task that called spawn, or it might run on a different thread, depending on how the runtime schedules tasks.
 // In other words, tokio::spawn allows for concurrent execution of tasks, but whether or not those tasks run in parallel on different threads is an implementation detail of the Tokio runtime.
+
+// Question: Whats the main reason of writing stream.flush() ?
+
+// The flush method is used to ensure that all intermediately buffered contents reach their destination.
+// In Rust, when you write data to a TcpStream (or any other kind of writeable stream), the data isn't necessarily sent over the network immediately. Instead, it's often buffered in memory and sent in larger chunks for efficiency.
+// The flush method is used to force the stream to send any buffered data immediately. This is useful when you want to make sure that data you've written is sent right away, rather than waiting for the buffer to fill up or for the system to decide to send the data on its own schedule.
+// In the context of a network server, you might call flush after writing a response to ensure that the response is sent back to the client immediately.
