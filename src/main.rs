@@ -56,3 +56,6 @@ async fn handle_connection(mut stream: TcpStream) {
 // In Rust, when you write data to a TcpStream (or any other kind of writeable stream), the data isn't necessarily sent over the network immediately. Instead, it's often buffered in memory and sent in larger chunks for efficiency.
 // The flush method is used to force the stream to send any buffered data immediately. This is useful when you want to make sure that data you've written is sent right away, rather than waiting for the buffer to fill up or for the system to decide to send the data on its own schedule.
 // In the context of a network server, you might call flush after writing a response to ensure that the response is sent back to the client immediately.
+
+// Redis protocol note
+// https://lethain.com/redis-protocol/
