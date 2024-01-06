@@ -2,6 +2,15 @@
 use tokio::net::{TcpListener, TcpStream};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
+#[allow(unused)]
+pub enum Command {
+    Ping,
+    Echo,
+    Get,
+    Set,
+}
+
+
 #[tokio::main]
 async fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
